@@ -1,0 +1,28 @@
+{
+  "name": "knex-hdb",
+  "version": "1.0.0",
+  "description": "SAP HANA support for Knex.js",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jasny/knex-hdb.git"
+  },
+  "keywords": [
+    "db",
+    "database",
+    "sap",
+    "hana"
+  ],
+  "author": "Arnold Daniels <arnold@jasny.net>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jasny/knex-hdb/issues"
+  },
+  "homepage": "https://github.com/jasny/knex-hdb#readme",
+  "dependencies": {
+    "knex": "^0.13.0"
+  }
+}
