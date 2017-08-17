@@ -3,18 +3,20 @@
 // -------
 import inherits from 'inherits';
 
-import Client from 'knex/client';
+import Client from 'knex/lib/client';
 import Promise from 'bluebird';
-import * as helpers from 'knex/src/helpers';
+import * as helpers from 'knex/lib/helpers';
 
-import Transaction from './transaction';
+import Formatter from './formatter';
 import QueryCompiler from './query/compiler';
+/*
 import SchemaCompiler from './schema/compiler';
 import TableCompiler from './schema/tablecompiler';
 import ColumnCompiler from './schema/columncompiler';
+*/
 
 import { assign, map } from 'lodash'
-import { makeEscape } from 'knex/query/string'
+import { makeEscape } from 'knex/lib/query/string'
 
 // Always initialize with the "QueryBuilder" and "QueryCompiler"
 // objects, which extend the base 'lib/query/builder' and
@@ -34,38 +36,46 @@ assign(Client_HDB.prototype, {
     return require('hdb')
   },
 
+  formatter() {
+    return new Formatter(this)
+  },
+  
   queryCompiler() {
     return new QueryCompiler(this, ...arguments)
   },
 
   schemaCompiler() {
-    return new SchemaCompiler(this, ...arguments)
+//    return new SchemaCompiler(this, ...arguments)
   },
 
   tableCompiler() {
-    return new TableCompiler(this, ...arguments)
+//    return new TableCompiler(this, ...arguments)
   },
 
   columnCompiler() {
-    return new ColumnCompiler(this, ...arguments)
+//    return new ColumnCompiler(this, ...arguments)
   },
 
   transaction() {
-    throw new Error("transactions not supported")
+    throw new Error("transactions not supported yet")
   },
 
   _escapeBinding: makeEscape(),
 
   wrapIdentifier(value) {
     if (value === '*') return value
-    const matched = value.match(/(.*?)(\[[0-9]\])/)
+    
+    const identifier = value.toUpperCase();
+    const matched = identifier.match(/(.*?)(\[[0-9]\])/)
     if (matched) return this.wrapIdentifier(matched[1]) + matched[2]
-    return `"${value.replace(/"/g, '""')}"`
+    return `"${identifier.replace(/"/g, '""')}"`
   },
 
   // Get a raw connection, called by the `pool` whenever a new
   // connection needs to be added to the pool.
   acquireRawConnection() {
+    const wrapIdentifier = this.wrapIdentifier;
+      
     return new Promise((resolver, rejecter) => {
       const connection = this.driver.createClient(this.connectionSettings)
       connection.connect((err) => {
@@ -73,7 +83,15 @@ assign(Client_HDB.prototype, {
         connection.on('error', err => {
           connection.__knex__disposed = err
         })
-        resolver(connection)
+        
+        if (this.connectionSettings.schema) {
+          connection.exec("set schema " + wrapIdentifier(this.connectionSettings.schema), (err) => {
+            if (err) return rejecter(err)
+            resolver(connection)
+          });
+        } else {
+          resolver(connection)
+        }
       })
     })
   },
@@ -110,8 +128,10 @@ assign(Client_HDB.prototype, {
       if (!sql) return resolver()
       if (obj.options) sql = assign({sql}, obj.options)
       
-      connection.prepare(obj.sql, function(statement, next) {
-        return statement.execute(obj.bindings, function(err, result) {
+      connection.prepare(obj.sql, function(err, statement) {
+        if (err) return rejecter(err)
+          
+        return statement.exec(obj.bindings || [], function(err, result) {
           if (err) return rejecter(err)
           
           if (obj.method === 'select' || obj.method === 'pluck' || obj.method === 'first') {

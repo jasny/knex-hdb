@@ -2,7 +2,7 @@
 // HDB Query Compiler
 // ------
 import inherits from 'inherits';
-import QueryCompiler from 'knex/src/query/compiler';
+import QueryCompiler from 'knex/lib/query/compiler';
 
 import { assign, compact } from 'lodash'
 
@@ -23,11 +23,11 @@ assign(QueryCompiler_HDB.prototype, {
     const order = this.order();
     const limit = this.limit();
     
-    return `update ${this.tableName}` +
-      (limit ? ` ${limit}` : '')
-      (join ? ` from ${this.tableName} ${join}` : '') +
-      ' set ' + updates.join(', ') +
-      (where ? ` ${where}` : '');
+    return `update ${this.tableName}`
+      + (limit ? ` ${limit}` : '')
+      + (join ? ` from ${this.tableName} ${join}` : '')
+      + ' set ' + updates.join(', ')
+      + (where ? ` ${where}` : '');
   },
 
   forUpdate() {
@@ -43,9 +43,9 @@ assign(QueryCompiler_HDB.prototype, {
     const column = this.single.columnInfo;
     const dbname = this.client.connectOptions.databaseName || '';
     return {
-      sql: 'select * TABLE_COLUMNS where TABLE_NAME = ?'
-        + (this.client.connectOptions.databaseName ? ' and SCHEMA_NAME = ?' : ''),
-      bindings: [this.single.table.toUpperCase(), dbname.toUpperCase()],
+      sql: 'select * from TABLE_COLUMNS where TABLE_NAME = ? and SCHEMA_NAME = CURRENT_SCHEMA'
+        + (column ? ' and COLUMN_NAME = ?' : ''),
+      bindings: [this.single.table.toUpperCase(), column ? column.toUpperCase() : ''],
       output(resp) {
         const out = resp.reduce(function(columns, val) {
           columns[val.COLUMN_NAME] = {
