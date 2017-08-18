@@ -1,12 +1,13 @@
 {
   "name": "knex-hdb",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "SAP HANA support for Knex.js",
   "main": "lib/index.js",
   "scripts": {
     "build": "npm run babel",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "babel": "node_modules/.bin/rimraf ./lib && node_modules/.bin/babel src --out-dir lib --copy-files"
+    "babel": "node_modules/.bin/rimraf ./lib && node_modules/.bin/babel src --out-dir lib --copy-files",
+    "prepublish": "npm run babel"
   },
   "repository": {
     "type": "git",
@@ -35,5 +36,11 @@
     "hdb": "^0.13.0",
     "knex": "^0.13.0",
     "rimraf": "^2.6.1"
-  }
+  },
+  "files": [
+    "README.md",
+    "src/*",
+    "lib/*",
+    "LICENSE"
+  ]
 }
