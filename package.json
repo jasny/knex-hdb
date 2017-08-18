@@ -1,6 +1,6 @@
 {
   "name": "knex-hdb",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "SAP HANA support for Knex.js",
   "main": "lib/index.js",
   "scripts": {
@@ -19,6 +19,7 @@
     "hana"
   ],
   "author": "Arnold Daniels <arnold@jasny.net>",
+  "contributors": [],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/jasny/knex-hdb/issues"
