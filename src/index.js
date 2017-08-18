@@ -9,11 +9,9 @@ import * as helpers from 'knex/lib/helpers';
 
 import Formatter from './formatter';
 import QueryCompiler from './query/compiler';
-/*
-import SchemaCompiler from './schema/compiler';
+import TableBuilder from './schema/tablebuilder';
 import TableCompiler from './schema/tablecompiler';
 import ColumnCompiler from './schema/columncompiler';
-*/
 
 import { assign, map } from 'lodash'
 import { makeEscape } from 'knex/lib/query/string'
@@ -44,16 +42,16 @@ assign(Client_HDB.prototype, {
     return new QueryCompiler(this, ...arguments)
   },
 
-  schemaCompiler() {
-//    return new SchemaCompiler(this, ...arguments)
+  tableBuilder(type, tableName, fn) {
+    return new TableBuilder(this, type, tableName, fn)
   },
 
   tableCompiler() {
-//    return new TableCompiler(this, ...arguments)
+    return new TableCompiler(this, ...arguments)
   },
 
   columnCompiler() {
-//    return new ColumnCompiler(this, ...arguments)
+    return new ColumnCompiler(this, ...arguments)
   },
 
   transaction() {
