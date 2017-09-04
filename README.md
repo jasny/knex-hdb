@@ -18,7 +18,7 @@ use the `makeknex` utility.
 
 ```js
 const makeKnex = require('knex/lib/util/make-knex');
-const HDBClient = require('/home/arnold/Projects/future-facts/knex-hdb/lib');
+const HDBClient = require('knex-hdb');
 
 var client = new HDBClient({
   host     : 'hostname',
