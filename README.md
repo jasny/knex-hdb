@@ -21,11 +21,13 @@ const makeKnex = require('knex/lib/util/make-knex');
 const HDBClient = require('knex-hdb');
 
 const client = new HDBClient({
-  host     : 'hostname',
-  port     : 30015,
-  user     : 'user',
-  password : 'secret',
-  schema   : 'schema'
+  connection: {
+    host     : 'hostname',
+    port     : 30015,
+    user     : 'user',
+    password : 'secret',
+    schema   : 'schema'
+  }
 });
 
 const knex = makeKnex(client);
