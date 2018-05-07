@@ -131,18 +131,8 @@ assign(Client_HDB.prototype, {
           
         return statement.exec(obj.bindings || [], function(err, result) {
           if (err) return rejecter(err)
-          
-          if (obj.method === 'select' || obj.method === 'pluck' || obj.method === 'first') {
-            result.fetch(function (err, rows) {
-              if (err) return rejecter(err)
-              
-              obj.response = rows
-              resolver(obj)
-            })
-          } else {
-            obj.response = result
-            resolver(obj)
-          }
+          obj.response = result
+          resolver(obj)
         })
       })
     })
