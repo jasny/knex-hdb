@@ -25,23 +25,12 @@ assign(QueryCompiler_HDB.prototype, {
         const where = this.where();
         const order = this.order();
         const limit = this.limit();
-        let sql = `update ${this.tableName}`
+
+        return `update ${this.tableName}`
             + (limit ? ` ${limit}` : '')
             + (join ? ` from ${this.tableName} ${join}` : '')
             + ' set ' + updates.join(', ')
             + (where ? ` ${where}` : '');
-        let {returning} = this.single||null;
-        if (returning) {
-            sql = {
-                sql: sql,
-                returning: '*',
-                returningSQL: 'select CURRENT_IDENTITY_VALUE() as ID from ' + this.tableName + '  limit 1;',
-                returningHandler(response) {
-                    return response[0].ID
-                }
-            };
-        }
-        return sql;
     },
 
     // Compiles an "insert" query, allowing for multiple
