@@ -3,7 +3,10 @@
 import inherits from 'inherits';
 import QueryCompiler from 'knex/lib/query/compiler';
 
-import {assign, compact} from 'lodash'
+import {
+    assign, bind, compact, groupBy, isEmpty, isString, isUndefined, map, omitBy,
+    reduce
+} from 'lodash';
 
 function QueryCompiler_HDB(client, builder) {
     QueryCompiler.call(this, client, builder)
