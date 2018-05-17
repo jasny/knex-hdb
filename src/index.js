@@ -123,7 +123,7 @@ assign(Client_HDB.prototype, {
     _query(connection, obj) {
         let returningSQL = null, returningHandler = null;
         if (obj.returningSQL) returningSQL = obj.returningSQL;
-        if (obj.returningHandler) returningSQL = obj.returningHandler;
+        if (obj.returningHandler) returningHandler = obj.returningHandler;
         if (!obj || typeof obj === 'string') obj = {sql: obj}
         return new Promise(function (resolver, rejecter) {
             let {sql} = obj
