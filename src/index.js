@@ -133,10 +133,10 @@ assign(Client_HDB.prototype, {
                 if (err) return rejecter(err)
                 return statement.exec(obj.bindings || [], function (err, result) {
                     if (err) return rejecter(err)
-                    if (returningSQL && isString(returningHandler)) {
+                    if (returningSQL) {
                         connection.exec(returningSQL, function (_err, res) {
                             if (_err) return rejecter(_err);
-                            if (returningHandler && isFunction(returningHandler)) {
+                            if (returningHandler) {
                                 resolver(returningHandler(res));
                             } else {
                                 resolver(res);
