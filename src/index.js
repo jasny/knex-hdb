@@ -55,7 +55,7 @@ assign(Client_HDB.prototype, {
     },
 
     transaction() {
-        throw new Error("transactions not supported yet")
+        throw new Error('Transaction not implemented yet')
     },
 
     _escapeBinding: makeEscape(),
@@ -155,20 +155,27 @@ assign(Client_HDB.prototype, {
     // Process the response as returned from the query.
     processResponse(obj, runner) {
         if (obj == null) return;
-        const {response} = obj
-        const {method} = obj
-
-        if (obj.output) return obj.output.call(runner, response)
+        var response = obj.response;
+        var method = obj.method;
+        function handleReturn(response){
+            try{
+                return typeof runner.client.config.postProcessResponse ==='function' ? runner.client.config.postProcessResponse(response) : response;
+            } catch(e){
+                return response;
+            }
+        }
+        if (obj.output) return obj.output.call(runner, response);
         switch (method) {
             case 'select':
             case 'pluck':
-            case 'first': {
-                const resp = helpers.skim(response)
-                if (method === 'pluck') return map(resp, obj.pluck)
-                return method === 'first' ? resp[0] : resp
+            case 'first':
+            {
+                var resp = helpers.skim(response);
+                if (method === 'pluck') return handleReturn((0, _map3.default)(resp, obj.pluck));
+                return method === 'first' ? handleReturn(resp[0]): handleReturn(resp);
             }
             default:
-                return response
+                return handleReturn(response);
         }
     },
 
@@ -177,7 +184,6 @@ assign(Client_HDB.prototype, {
     cancelQuery(connectionToKill) {
         return Promise.reject('cancel query not supported')
     }
-
 })
 
 export default Client_HDB
