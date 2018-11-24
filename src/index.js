@@ -137,7 +137,7 @@ assign(Client_HDB.prototype, {
                         connection.exec(returningSQL, function (_err, res) {
                             if (_err) return rejecter(_err);
                             if (returningHandler) {
-                                obj.response =  returningHandler(res);
+                                obj.response = returningHandler(res);
                                 resolver(obj);
                             } else {
                                 resolver(obj);
@@ -157,22 +157,23 @@ assign(Client_HDB.prototype, {
         if (obj == null) return;
         var response = obj.response;
         var method = obj.method;
-        function handleReturn(response){
-            try{
-                return typeof runner.client.config.postProcessResponse ==='function' ? runner.client.config.postProcessResponse(response) : response;
-            } catch(e){
+
+        function handleReturn(response) {
+            try {
+                return typeof runner.client.config.postProcessResponse === 'function' ? runner.client.config.postProcessResponse(response, obj.options) : response;
+            } catch (e) {
                 return response;
             }
         }
+
         if (obj.output) return obj.output.call(runner, response);
         switch (method) {
             case 'select':
             case 'pluck':
-            case 'first':
-            {
+            case 'first': {
                 var resp = helpers.skim(response);
                 if (method === 'pluck') return handleReturn((0, _map3.default)(resp, obj.pluck));
-                return method === 'first' ? handleReturn(resp[0]): handleReturn(resp);
+                return method === 'first' ? handleReturn(resp[0]) : handleReturn(resp);
             }
             default:
                 return handleReturn(response);
