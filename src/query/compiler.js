@@ -71,7 +71,7 @@ assign(QueryCompiler_HDB.prototype, {
             sql = {
                 sql: sql,
                 returning: '*',
-                returningSQL: 'select CURRENT_IDENTITY_VALUE() as ID' + ' from ' + this.tableName + '  limit 1;',
+                returningSQL: `select ${this.tableName.replace(/"/g, '')}_ID_INCREMENTER.CURRVAL AS ID from DUMMY;`,
                 returningHandler(response) {
                     return response[0].ID
                 }
