@@ -34,7 +34,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-es2015-loose": "^8.0.0",
     "hdb": "^0.13.0",
-    "knex": "^0.13.0",
+    "knex": "^0.20.1",
     "rimraf": "^2.6.1"
   },
   "files": [
