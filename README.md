@@ -13,7 +13,7 @@ Please read the [knex documentation](http://knexjs.org/).
 
 ### Connect
 
-Passing a custom client class to knex isn't working. You therefore need to instantiate the client yourself and
+Passing a custom client class to knex doesn't work. You need to instantiate the client manually and
 use the `makeknex` utility.
 
 ```js
@@ -60,14 +60,13 @@ To build this project from source, download it from GitHub and then run
 
 There will be a new 'lib' folder.
 
-## Todo
+## Contribution
+
+_This library supports limited features of SAP HANA. If you like to contribute, please create a pull request._
 
 * Unit tests
 * Support for modifying a table
 * Tranactions
 * Upsert support
-
-_This is a very early version and there are likely to be bugs. Please be so kind to report any issues you come across
-and if possible provide a pull request._
 
 [1]: https://help.sap.com/viewer/4fe29514fd584807ac9f2a04f6754767/2.0.02/en-US/20d58a5f75191014b2fe92141b7df228.html#loio20d58a5f75191014b2fe92141b7df228__sql_create_table_1sql_create_table_syntax_elements
